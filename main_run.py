@@ -1,6 +1,8 @@
 # %%
 # Load Libraries
 from azureml.core.runconfig import (CondaDependencies, RunConfiguration)
+from azureml.pipeline.core import (PipelineData, Pipeline)
+from azureml.pipeline.steps import PythonScriptStep
 from azureml.data.data_reference import DataReference
 
 # my custom libraries
@@ -31,7 +33,7 @@ get_iris_step = PythonScriptStep(
     arguments=['--output_dir', iris_raw],
     compute_target=f.compute_target,
     outputs=[iris_raw],
-    runconfig=f.amlcompute_run_config,
+    runconfig=amlcompute_run_config,
     source_directory=os.path.join(
         os.getcwd(), 'pipes/get_iris'),
     allow_reuse=False
@@ -42,9 +44,9 @@ munge_iris_step = PythonScriptStep(
     script_name='munge_iris.py',
     arguments=['--output_dir', iris_raw],
     compute_target=f.compute_target,
-    inputs=[iris_raw]
+    inputs=[iris_raw],
     outputs=[iris_gold],
-    runconfig=f.amlcompute_run_config,
+    runconfig=amlcompute_run_config,
     source_directory=os.path.join(
         os.getcwd(), 'pipes/munge'),
     allow_reuse=False
@@ -58,3 +60,20 @@ pipeline = Pipeline(
     workspace=f.ws,
     steps=[get_iris_step, munge_iris_step]
 )
+
+
+# %%
+# Runn your model and watch the output
+
+pipeline_run = (f.exp
+                .submit(pipeline,
+                        regenerate_outputs=False,
+                        continue_on_step_failure=False,
+                        tags=f.params
+                        )
+                )
+
+
+run_status = pipeline_run.wait_for_completion(show_output=True)
+
+# %%
