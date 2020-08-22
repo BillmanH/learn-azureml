@@ -22,9 +22,9 @@ amlcompute_run_config.environment.docker.enabled = True
 # Define Datasets
 # Just noting the reference to the data store location.
 iris_raw = PipelineData('iris_raw',
-                        datastore=f.ws.datastores['azureml_globaldatasets'])
+                        datastore=f.ws.datastores['workspaceblobstore'])
 iris_gold = PipelineData('iris_gold',
-                         datastore=f.ws.datastores['azureml_globaldatasets'])
+                         datastore=f.ws.datastores['workspaceblobstore'])
 
 # %%
 get_iris_step = PythonScriptStep(

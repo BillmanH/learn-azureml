@@ -7,3 +7,7 @@ settings.yaml
 
 #python cache files
 __pycache__/*
+
+# Little things that the automl process creates. 
+notebooks/*.log
+notebooks/.azureml/*
