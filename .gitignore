@@ -1,0 +1,9 @@
+# removing vs code rubbish
+.vscode/*
+
+# removing sensitive key info
+settings.yaml
+
+
+#python cache files
+__pycache__/*
