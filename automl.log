@@ -1,0 +1,19 @@
+2020-08-23 12:42:26.941 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package azureml-train-automl missing from dependencies file.
+2020-08-23 12:42:27.944 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:202 - Using pinned version: azureml-train-automl==1.11.0.*
+2020-08-23 12:42:27.946 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package pandas missing from dependencies file.
+2020-08-23 12:42:27.946 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:202 - Using pinned version: pandas>=0.21.0,<=0.23.4
+2020-08-23 12:42:27.947 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package psutil missing from dependencies file.
+2020-08-23 12:42:27.947 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:202 - Using pinned version: psutil>5.0.0,<6.0.0
+2020-08-23 12:42:27.948 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package scikit-learn missing from dependencies file.
+2020-08-23 12:42:27.948 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:202 - Using pinned version: scikit-learn<=0.20.3,>=0.19.0
+2020-08-23 12:42:27.948 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package numpy missing from dependencies file.
+2020-08-23 12:42:27.949 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:202 - Using pinned version: numpy>=1.16.0,<1.17.0
+2020-08-23 12:42:27.951 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package py-xgboost missing from dependencies file.
+2020-08-23 12:42:27.952 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:202 - Using pinned version: py-xgboost<=0.80
+2020-08-23 12:42:27.952 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package inference-schema missing from dependencies file.
+2020-08-23 12:42:27.953 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package holidays missing from dependencies file.
+2020-08-23 12:42:27.953 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:202 - Using pinned version: holidays==0.9.11
+2020-08-23 12:42:27.954 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package fbprophet missing from dependencies file.
+2020-08-23 12:42:27.954 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:202 - Using pinned version: fbprophet==0.5
+2020-08-23 12:42:27.954 - INFO - 7944 - azureml.train.automl._azureautomlclient.modify_run_configuration:196 - Package setuptools-git missing from dependencies file.
+2020-08-23 12:42:28.142 - INFO - 7944 - azureml.train.automl._azureautomlclient._validate_input:596 - Validation service found the data has no errors.
