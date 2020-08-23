@@ -7,22 +7,20 @@ import os
 
 # %%
 # Parse the arguments
-parser = (argparse.ArgumentParser(
-    description="getting inputs from the pipeline setup"))
-parser.add_argument('--output_dir', dest="output_dir")
-parser.add_argument('--input_dir', dest="input_dir")
+parser = argparse.ArgumentParser(description="getting inputs from the pipeline setup")
+parser.add_argument("--output_dir", dest="output_dir")
+parser.add_argument("--input_dir", dest="input_dir")
 args = parser.parse_args()
 
 
 # %%
 # Reading the file from the input.
 
-df = pd.read_csv('iris.csv', index_col=0)
+df = pd.read_csv("iris.csv", index_col=0)
 print(df.head())
 
 # %%
 # Saving the output file.
 print("rows total: ", len(df))
-outpath = os.path.join(args.output_dir, 'iris.csv')
-df.to_csv('iris.csv')
-print("file saved to:", outpath)
+df.to_csv(args.output_dir + "iris.csv")
+print("file saved to:", args.output_dir + "iris.csv")
