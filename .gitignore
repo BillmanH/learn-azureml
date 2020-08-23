@@ -11,4 +11,4 @@ __pycache__/*
 # Little things that the automl process creates. 
 notebooks/*.log
 notebooks/.azureml/*
-
+automl.log
