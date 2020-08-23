@@ -1,11 +1,14 @@
 # %%
 # Load Libraries
+
+from azureml.pipeline.core import TrainingOutput
 from azureml.core.runconfig import CondaDependencies, RunConfiguration
+from azureml.core import Dataset
 from azureml.pipeline.core import PipelineData, Pipeline
 from azureml.pipeline.steps import PythonScriptStep
 from azureml.data.data_reference import DataReference
 
-# from azureml.pipeline.steps import AutoMLStep
+from azureml.pipeline.steps import AutoMLStep
 
 from azureml.train.automl import AutoMLConfig
 
@@ -35,9 +38,14 @@ amlcompute_run_config.environment.docker.enabled = True
 iris_raw = PipelineData(
     "iris_raw", datastore=f.ws.datastores[f.params["datastore_name"]]
 )
+
+
 iris_gold = PipelineData(
     "iris_gold", datastore=f.ws.datastores[f.params["datastore_name"]]
 )
+
+iris_gold_as_dataset = iris_gold.as_dataset().parse_delimited_files()
+
 
 # %%
 get_iris_step = PythonScriptStep(
@@ -48,7 +56,7 @@ get_iris_step = PythonScriptStep(
     outputs=[iris_raw],
     runconfig=amlcompute_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/get_iris"),
-    allow_reuse=False,
+    allow_reuse=True,
 )
 
 munge_iris_step = PythonScriptStep(
@@ -60,31 +68,49 @@ munge_iris_step = PythonScriptStep(
     outputs=[iris_gold],
     runconfig=amlcompute_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/munge"),
-    allow_reuse=False,
+    allow_reuse=True,
 )
 
 # %%
-# The AutoML model is a little different and requires a separate run configuration.
 
-# automl_config = AutoMLConfig(
-#     task="regression",
-#     experiment_timeout_minutes=60,
-#     training_data=training_data,
-#     label_column_name=target,
-#     model_explainability=True,
-#     iterations=10,
-#     n_cross_validations=3,
-#     iteration_timeout_minutes=5,
-#     primary_metric="spearman_correlation",
-# )
 
-# AutoML_step = AutoMLStep("train_model", automl_config)
+metrics_data = PipelineData(name='metrics_data',
+                            datastore=datastore,
+                            pipeline_output_name='metrics_output',
+                            training_output=TrainingOutput(type='Metrics'))
 
+model_data = PipelineData(name='best_model_data',
+                          datastore=datastore,
+                          pipeline_output_name='model_output',
+                          training_output=TrainingOutput(type='Model'))
+
+
+automl_config = AutoMLConfig(
+    task="regression",
+    experiment_timeout_minutes=60,
+    training_data=iris_gold_as_dataset,
+    label_column_name="species",
+    model_explainability=False,
+    compute_target=f.compute_target,
+    iterations=10,
+    n_cross_validations=3,
+    iteration_timeout_minutes=5,
+    primary_metric="spearman_correlation",
+)
+
+AutoML_step = AutoMLStep("train_model", automl_config,
+                         outputs=[metrics_data, model_data],
+                         enable_default_model_output=False,
+                         enable_default_metrics_output=False,)
+
+
+# when working with outputs
+# https://docs.microsoft.com/en-us/azure/machine-learning/how-to-use-automlstep-in-pipelines#configure-and-create-the-automated-ml-pipeline-step
 
 # %% Define the pipeline
 # The pipeline is a list of steps.
 # The inputs and outputs of each step show where they would sit in the DAG.
-pipeline = Pipeline(workspace=f.ws, steps=[get_iris_step, munge_iris_step])
+pipeline = Pipeline(workspace=f.ws, steps=[AutoML_step])
 
 
 # %%
