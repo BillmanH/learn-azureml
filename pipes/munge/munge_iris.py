@@ -17,8 +17,8 @@ args = parser.parse_args()
 # %%
 # Reading the file from the input.
 
-df = pd.read_csv(os.path.join(args.input_dir, 'iris.csv'), index_col=0)
-
+df = pd.read_csv('iris.csv', index_col=0)
+print(df.head())
 
 # %%
 # Saving the output file.

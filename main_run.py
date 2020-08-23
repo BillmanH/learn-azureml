@@ -76,8 +76,9 @@ pipeline_run = (f.exp
 
 print(pipeline_run.get_portal_url())
 
-# Commenting out this section as it doesn't read well.
-# Usint the AML experience instead.
+
+# the output doesn't show well in Visual Studio code.
+# But if running on CMD it can be useful.
 # run_status = pipeline_run.wait_for_completion(show_output=True)
 
 # %%

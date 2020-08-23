@@ -7,6 +7,9 @@ william.jeffrey.harding@gmail.com
 
 last tested at Azure ML SDK Version:  1.11.0. It was working at that time. 
 
+## Setup
+You'll need to add a file in the root directory called `settings.yaml` and add all of the items in it. Those are things you get from the Azure portal like the tenant ID and so on. Those are custom for each user. See the example below.
+
 ## Notebooks:
 I have two notebooks that walk through the complete project of authenticating, lodading, training and looking at the output dataset. The Microsoft documentation page has similar notebooks, however mine actually work end to end. 
 
@@ -21,9 +24,12 @@ The notebook process assumes that you can do all of your data munging locally an
 | main_run.py | Defines the pipeline, and runs each individual step |
 
 
-## Settings.yaml requires:
+## Settings.yaml requires (and will crash without):
 | Parameter | Description |
 | --- | --- |
-| workspace_name | TODO |
-| expermient_name | TODO |
-| compute_name | TODO |
+| workspace_name | the name of the workspace, from the portal |
+| expermient_name | the name of the experiment, from the portal or just make one up |
+| compute_name | name of the compute. Create on in the portal if you don't have one |
+| datastore_name | the name of the mounted datastore. This is like a blob store where you will put files |
+| tenant_id | Your Azure Tenant. In your azure properties |
+| resource_group | the resource group that the AzureML service is in |
