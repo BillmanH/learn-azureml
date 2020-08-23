@@ -22,9 +22,9 @@ amlcompute_run_config.environment.docker.enabled = True
 # Define Datasets
 # Just noting the reference to the data store location.
 iris_raw = PipelineData('iris_raw',
-                        datastore=f.ws.datastores['workspaceblobstore'])
+                        datastore=f.ws.datastores[f.params['datastore_name']])
 iris_gold = PipelineData('iris_gold',
-                         datastore=f.ws.datastores['workspaceblobstore'])
+                         datastore=f.ws.datastores[f.params['datastore_name']])
 
 # %%
 get_iris_step = PythonScriptStep(
@@ -42,7 +42,8 @@ get_iris_step = PythonScriptStep(
 munge_iris_step = PythonScriptStep(
     name='munge_iris_step',
     script_name='munge_iris.py',
-    arguments=['--output_dir', iris_raw],
+    arguments=['--input_dir', iris_raw,
+               '--output_dir', iris_gold],
     compute_target=f.compute_target,
     inputs=[iris_raw],
     outputs=[iris_gold],
@@ -73,7 +74,10 @@ pipeline_run = (f.exp
                         )
                 )
 
+print(pipeline_run.get_portal_url())
 
-run_status = pipeline_run.wait_for_completion(show_output=True)
+# Commenting out this section as it doesn't read well.
+# Usint the AML experience instead.
+# run_status = pipeline_run.wait_for_completion(show_output=True)
 
 # %%

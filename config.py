@@ -24,7 +24,7 @@ interactive_auth = InteractiveLoginAuthentication(
     tenant_id=params.get('tenant_id'))
 
 ws = Workspace.get(name=params.get("workspace_name"),
-                   subscription_id=params.get('subscriptionId'),
+                   subscription_id=params.get('subscription_id'),
                    resource_group=params.get('resource_group'),
                    auth=interactive_auth)
 print(f"Found workspace {ws.name} at location {ws.location}")
