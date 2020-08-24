@@ -5,7 +5,7 @@ by [William Jeffrey Harding](https://www.linkedin.com/in/hardingwilliam/)
 
 william.jeffrey.harding@gmail.com 
 
-last tested at Azure ML SDK Version:  1.11.0. It was working at that time. 
+last tested at Azure ML SDK Version:  1.12.0. Still haven't found a process that works completely. 
 
 ## Setup
 You'll need to add a file in the root directory called `settings.yaml` and add all of the items in it. Those are things you get from the Azure portal like the tenant ID and so on. Those are custom for each user. See the example below.

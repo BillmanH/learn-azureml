@@ -23,7 +23,7 @@ cd = CondaDependencies.create(
     pip_packages=[
         "pandas",
         "numpy",
-        "azureml-sdk[explain,automl]==1.11.0",
+        "azureml-sdk[explain,automl]",
         "azureml-defaults",
         "azureml-train-automl-runtime",
     ],
@@ -35,14 +35,14 @@ amlcompute_run_config.environment.docker.enabled = True
 # %%
 # Define Datasets
 # Just noting the reference to the data store location.
-iris_raw = PipelineData(
-    "iris_raw", datastore=f.ws.datastores[f.params["datastore_name"]]
-)
+
+# saving the datastore location for consistency
+datastore = f.ws.datastores[f.params["datastore_name"]]
+
+iris_raw = PipelineData("iris_raw", datastore=datastore)
 
 
-iris_gold = PipelineData(
-    "iris_gold", datastore=f.ws.datastores[f.params["datastore_name"]]
-)
+iris_gold = PipelineData("iris_gold", datastore=datastore)
 
 iris_gold_as_dataset = iris_gold.as_dataset().parse_delimited_files()
 
@@ -72,17 +72,21 @@ munge_iris_step = PythonScriptStep(
 )
 
 # %%
+# AutoML Step is very different
 
+metrics_data = PipelineData(
+    name="metrics_data",
+    datastore=datastore,
+    pipeline_output_name="metrics_output",
+    training_output=TrainingOutput(type="Metrics"),
+)
 
-metrics_data = PipelineData(name='metrics_data',
-                            datastore=datastore,
-                            pipeline_output_name='metrics_output',
-                            training_output=TrainingOutput(type='Metrics'))
-
-model_data = PipelineData(name='best_model_data',
-                          datastore=datastore,
-                          pipeline_output_name='model_output',
-                          training_output=TrainingOutput(type='Model'))
+model_data = PipelineData(
+    name="best_model_data",
+    datastore=datastore,
+    pipeline_output_name="model_output",
+    training_output=TrainingOutput(type="Model"),
+)
 
 
 automl_config = AutoMLConfig(
@@ -98,10 +102,13 @@ automl_config = AutoMLConfig(
     primary_metric="spearman_correlation",
 )
 
-AutoML_step = AutoMLStep("train_model", automl_config,
-                         outputs=[metrics_data, model_data],
-                         enable_default_model_output=False,
-                         enable_default_metrics_output=False,)
+AutoML_step = AutoMLStep(
+    "train_model",
+    automl_config,
+    outputs=[metrics_data, model_data],
+    enable_default_model_output=False,
+    enable_default_metrics_output=False,
+)
 
 
 # when working with outputs

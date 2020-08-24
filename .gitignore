@@ -11,4 +11,9 @@ __pycache__/*
 # Little things that the automl process creates. 
 notebooks/*.log
 notebooks/.azureml/*
+
+
+
+# Azure ML log is tough to get rid of. 
 automl.log
+
