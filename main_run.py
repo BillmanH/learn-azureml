@@ -1,17 +1,18 @@
 # %%
 # Load Libraries
 
-from azureml.pipeline.core import TrainingOutput
 from azureml.core.runconfig import CondaDependencies, RunConfiguration
 from azureml.core import Dataset
+
+from azureml.pipeline.core import TrainingOutput
 from azureml.pipeline.core import PipelineData, Pipeline
 from azureml.pipeline.steps import PythonScriptStep
-from azureml.data.data_reference import DataReference
 
+from azureml.data.data_reference import DataReference
 from azureml.pipeline.steps import AutoMLStep
+from azureml.data import OutputFileDatasetConfig
 
 from azureml.train.automl import AutoMLConfig
-
 
 # my custom libraries
 import config as f
@@ -44,8 +45,6 @@ iris_raw = PipelineData("iris_raw", datastore=datastore)
 
 iris_gold = PipelineData("iris_gold", datastore=datastore)
 
-iris_gold_as_dataset = iris_gold.as_dataset().parse_delimited_files()
-
 
 # %%
 # Setting up script steps
@@ -61,17 +60,32 @@ get_iris_step = PythonScriptStep(
     allow_reuse=True,
 )
 
+output = OutputFileDatasetConfig(destination=(datastore, 'iris_gold'))
+
+
 munge_iris_step = PythonScriptStep(
     name="munge_iris_step",
     script_name="munge_iris.py",
-    arguments=["--input_dir", iris_raw, "--output_dir", iris_gold],
+    arguments=["--input_dir", iris_raw, "--output_dir", output],
     compute_target=f.compute_target,
     inputs=[iris_raw],
-    outputs=[iris_gold],
+    outputs=[output],
     runconfig=amlcompute_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/munge"),
     allow_reuse=True,
 )
+
+# register_iris_step = PythonScriptStep(
+#     name="register_iris_step",
+#     script_name="register_iris.py",
+#     arguments=["--input_dir", iris_gold, "--register_name", "iris_gold"],
+#     compute_target=f.compute_target,
+#     inputs=[iris_raw]
+#     runconfig=amlcompute_run_config,
+#     source_directory=os.path.join(os.getcwd(), "pipes/register_iris"),
+#     allow_reuse=True,
+# )
+
 
 # %%
 # AutoML Step is very different
@@ -93,10 +107,12 @@ model_data = PipelineData(
 # Supported types: [azureml.data.tabular_dataset.TabularDataset,
 # azureml.pipeline.core.pipeline_output_dataset.PipelineOutputTabularDataset]
 
+
 automl_config = AutoMLConfig(
+    training_data=output.read_delimited_files(
+        path_glob="*.csv"),
     task="regression",
     experiment_timeout_minutes=60,
-    training_data=iris_gold,
     label_column_name="species",
     model_explainability=False,
     compute_target=f.compute_target,
@@ -121,7 +137,7 @@ AutoML_step = AutoMLStep(
 # %% Define the pipeline
 # The pipeline is a list of steps.
 # The inputs and outputs of each step show where they would sit in the DAG.
-pipeline = Pipeline(workspace=f.ws, steps=[AutoML_step])
+pipeline = Pipeline(workspace=f.ws, steps=[AutoMLStep])
 
 
 # %%
