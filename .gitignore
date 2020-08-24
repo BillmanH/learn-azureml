@@ -15,5 +15,5 @@ notebooks/.azureml/*
 
 
 # Azure ML log is tough to get rid of. 
-automl.log
+#automl.log
 

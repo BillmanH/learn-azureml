@@ -48,6 +48,8 @@ iris_gold_as_dataset = iris_gold.as_dataset().parse_delimited_files()
 
 
 # %%
+# Setting up script steps
+
 get_iris_step = PythonScriptStep(
     name="get_iris_step",
     script_name="get_iris.py",
@@ -88,11 +90,13 @@ model_data = PipelineData(
     training_output=TrainingOutput(type="Model"),
 )
 
+# Supported types: [azureml.data.tabular_dataset.TabularDataset,
+# azureml.pipeline.core.pipeline_output_dataset.PipelineOutputTabularDataset]
 
 automl_config = AutoMLConfig(
     task="regression",
     experiment_timeout_minutes=60,
-    training_data=iris_gold_as_dataset,
+    training_data=iris_gold,
     label_column_name="species",
     model_explainability=False,
     compute_target=f.compute_target,
