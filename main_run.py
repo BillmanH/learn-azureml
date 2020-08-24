@@ -109,8 +109,7 @@ model_data = PipelineData(
 
 
 automl_config = AutoMLConfig(
-    training_data=output.read_delimited_files(
-        path_glob="*.csv"),
+    training_data=output.read_delimited_files(),
     task="regression",
     experiment_timeout_minutes=60,
     label_column_name="species",
