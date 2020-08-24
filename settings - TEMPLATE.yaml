@@ -1,0 +1,10 @@
+# AzureML workspace level
+workspace_name: workspace_name
+expermient_name: expermient_name
+compute_name: compute_name
+datastore_name: datastore_name
+
+# subscription level
+tenant_id: tenant_id
+subscription_id: subscription_id
+resource_group: resource_group
