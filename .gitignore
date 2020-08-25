@@ -11,9 +11,12 @@ __pycache__/*
 # Little things that the automl process creates. 
 notebooks/*.log
 notebooks/.azureml/*
-
-
-
-# Azure ML log is tough to get rid of. 
 automl.log
+automl_errors.log
+azureml/*
+
+# extra notebooks
+notebooks/.ipynb_checkpoints/*
+notebooks/aml-pipelines-how-to-use-automlstep (1).ipynb
+
 
