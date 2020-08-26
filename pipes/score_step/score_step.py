@@ -41,5 +41,5 @@ df_shap = pd.DataFrame(shap_values, columns=features_df.columns)
 # %%
 # Save output
 os.makedirs(args.shap_tables, exist_ok=True)
-outputpath = os.path.join(args.output_dir, "iris_shap_1.csv")
+outputpath = os.path.join(args.shap_tables, "iris_shap_1.csv")
 df_shap.to_csv(outputpath)
