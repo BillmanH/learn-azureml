@@ -76,11 +76,9 @@ model_data = PipelineData(
 
 automl_settings = {
     "iteration_timeout_minutes": 5,
-    "iterations": 1,
     "n_cross_validations": 2,
     "primary_metric": 'accuracy',
     "featurization": 'auto',
-    "max_concurrent_iterations": 5
 }
 
 automl_config = AutoMLConfig(task='classification',

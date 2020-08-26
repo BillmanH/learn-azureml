@@ -19,4 +19,8 @@ azureml/*
 notebooks/.ipynb_checkpoints/*
 notebooks/aml-pipelines-how-to-use-automlstep (1).ipynb
 
+# Pickled model files
+models/*
 
+# rando notebooks that have been created but not used
+*Untitled.ipynb
