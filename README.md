@@ -5,7 +5,9 @@ by [William Jeffrey Harding](https://www.linkedin.com/in/hardingwilliam/)
 
 william.jeffrey.harding@gmail.com 
 
-last tested at Azure ML SDK Version:  1.12.0. Still haven't found a process that works completely. 
+last tested at Azure ML SDK Version:  1.12.0. Confirmed that this process works end-to-end. 
+
+![pipline diagram](images/Run_diagram.png)
 
 ## Setup
 You'll need to add a file in the root directory called `settings.yaml` and add all of the items in it. Those are things you get from the Azure portal like the tenant ID and so on. Those are custom for each user. See the example below.
@@ -29,7 +31,7 @@ The notebook process assumes that you can do all of your data munging locally an
 | --- | --- |
 | workspace_name | the name of the workspace, from the portal |
 | expermient_name | the name of the experiment, from the portal or just make one up |
-| compute_name | name of the compute. Create on in the portal if you don't have one |
+| compute_name | name of the compute. Create one in the portal if you don't have one |
 | datastore_name | the name of the mounted datastore. This is like a blob store where you will put files |
 | tenant_id | Your Azure Tenant. In your azure properties |
 | resource_group | the resource group that the AzureML service is in |
