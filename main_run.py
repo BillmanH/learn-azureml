@@ -2,9 +2,10 @@
 # Load Libraries
 
 # my custom libraries
+
 import config as f
 from azureml.core import Dataset
-from azureml.core.runconfig import CondaDependencies, RunConfiguration
+
 from azureml.data import OutputFileDatasetConfig
 from azureml.data.data_reference import DataReference
 from azureml.pipeline.core import Pipeline, PipelineData, TrainingOutput
@@ -12,22 +13,6 @@ from azureml.pipeline.steps import (AutoMLStep, DataTransferStep,
                                     PythonScriptStep)
 from azureml.train.automl import AutoMLConfig
 
-
-# %%
-# Define our compute environment.
-# This is the env that will be loaded into the docker container that does our work.
-cd = CondaDependencies.create(
-    pip_packages=[
-        "pandas",
-        "numpy",
-        "azureml-sdk[automl,interpret]==1.12.0",
-        "azureml-defaults",
-        "azureml-train-automl-runtime",
-    ],
-    conda_packages=["xlrd", "scikit-learn", "numpy", "pyyaml", "pip"],
-)
-amlcompute_run_config = RunConfiguration(conda_dependencies=cd)
-amlcompute_run_config.environment.docker.enabled = True
 
 # %%
 # Define Datasets
@@ -49,7 +34,7 @@ get_iris_step = PythonScriptStep(
     arguments=["--output_dir", iris_raw],
     compute_target=f.compute_target,
     outputs=[iris_raw],
-    runconfig=amlcompute_run_config,
+    runconfig=f.amlcompute_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/get_iris"),
     allow_reuse=True,
 )
@@ -63,7 +48,7 @@ munge_iris_step = PythonScriptStep(
     compute_target=f.compute_target,
     inputs=[iris_raw],
     outputs=[output],
-    runconfig=amlcompute_run_config,
+    runconfig=f.amlcompute_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/munge"),
     allow_reuse=True,
 )
@@ -125,7 +110,7 @@ score_step = PythonScriptStep(
     compute_target=f.compute_target,
     inputs=[model_data,  output],
     outputs=[shap_tables],
-    runconfig=amlcompute_run_config,
+    runconfig=f.amlcompute_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/score_step"),
     allow_reuse=True,
 )
@@ -147,7 +132,7 @@ pipeline_run = f.exp.submit(
     pipeline, regenerate_outputs=False, continue_on_step_failure=False, tags=f.params
 )
 
-print(pipeline_run.get_portal_url())
+# print(pipeline_run.get_portal_url())
 # pipeline_run.wait_for_completion()
 
 # the output doesn't show well in Visual Studio code.

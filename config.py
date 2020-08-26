@@ -1,14 +1,16 @@
 # %% Load Packages
 
+from azureml.core.conda_dependencies import CondaDependencies
 import os
 import sys
-import datetime
-import yaml
 from datetime import date
 
-from azureml.core import VERSION, Workspace, Experiment
-from azureml.core.compute import ComputeTarget
+import yaml
+
+from azureml.core import VERSION, Environment, Experiment, Workspace
 from azureml.core.authentication import InteractiveLoginAuthentication
+from azureml.core.compute import ComputeTarget
+from azureml.core.runconfig import CondaDependencies, RunConfiguration
 
 sys.path.append(os.getcwd())
 print("Azure ML SDK Version: ", VERSION)
@@ -60,3 +62,22 @@ def save_params(steps):
             yaml.dump(params, file)
     with open('notebooks/settings.yaml', 'w') as file:
         yaml.dump(params, file)
+
+
+# %%
+# Adding conda dependancies.
+
+cd = CondaDependencies.create(
+    pip_packages=[
+        "pandas",
+        "numpy",
+        "azureml-sdk[automl,interpret]",
+        "azureml-defaults",
+        "azureml-train-automl-runtime",
+    ],
+    conda_packages=["xlrd", "scikit-learn", "numpy", "pyyaml", "pip"],
+)
+amlcompute_run_config = RunConfiguration(conda_dependencies=cd)
+amlcompute_run_config.environment.docker.enabled = True
+amlcompute_run_config.environment = Environment.get(
+    ws, name='AzureML-AutoML').clone("bills-test")
