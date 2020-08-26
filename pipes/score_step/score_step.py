@@ -22,7 +22,7 @@ args = parser.parse_args()
 # %%
 # Reading the file from the input.
 inputpath = os.path.join(args.iris_gold, "iris_gold.csv")
-df = pd.read_csv(inputpath, index_col=0)
+df = pd.read_csv(inputpath)
 print(df.head())
 
 

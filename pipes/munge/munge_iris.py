@@ -17,7 +17,7 @@ args = parser.parse_args()
 # %%
 # Reading the file from the input.
 inputpath = os.path.join(args.input_dir, "iris.csv")
-df = pd.read_csv(inputpath, index_col=0)
+df = pd.read_csv(inputpath)
 print(df.head())
 
 # %%
@@ -26,5 +26,5 @@ os.makedirs(args.output_dir, exist_ok=True)
 
 print("rows total: ", len(df))
 outputpath = os.path.join(args.output_dir, "iris_gold.csv")
-df.to_csv(outputpath)
+df.to_csv(outputpath, index=False)
 print("file saved to:", outputpath)

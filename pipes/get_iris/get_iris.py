@@ -27,5 +27,5 @@ os.makedirs(args.output_dir, exist_ok=True)
 
 # Saving the output file.
 outpath = os.path.join(args.output_dir, "iris.csv")
-df.to_csv(outpath)
+df.to_csv(outpath, index=False)
 print("file saved to:", outpath)

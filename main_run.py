@@ -79,13 +79,14 @@ automl_settings = {
     "n_cross_validations": 2,
     "primary_metric": 'accuracy',
     "featurization": 'auto',
+    "iterations": 1
 }
 
 automl_config = AutoMLConfig(task='classification',
                              debug_log='automl_errors.log',
                              path='iris_gold',
                              training_data=output.read_delimited_files(
-                                 'iris_gold.csv'),
+                                 'iris_gold.csv', include_path=False),
                              label_column_name="species",
                              compute_target=f.compute_target,
                              model_explainability=True,
