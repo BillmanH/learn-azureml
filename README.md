@@ -7,7 +7,7 @@ william.jeffrey.harding@gmail.com
 
 last tested at Azure ML SDK Version:  1.12.0. Confirmed that this process works end-to-end. 
 
-![pipline diagram](https://github.com/BillmanH/learn-azureml/images/Run_diagram.png)
+![pipline diagram](images/Run_diagram.png)
 
 ## Setup
 You'll need to add a file in the root directory called `settings.yaml` and add all of the items in it. Those are things you get from the Azure portal like the tenant ID and so on. Those are custom for each user. See the example below.
