@@ -13,6 +13,7 @@ from azureml.pipeline.steps import (AutoMLStep, DataTransferStep,
                                     PythonScriptStep)
 from azureml.train.automl import AutoMLConfig
 
+import os
 
 # %%
 # Define Datasets
