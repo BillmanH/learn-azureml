@@ -82,3 +82,18 @@ amlcompute_run_config = RunConfiguration(conda_dependencies=cd)
 amlcompute_run_config.environment.docker.enabled = True
 amlcompute_run_config.environment = Environment.get(
     ws, name='AzureML-AutoML').clone("bills-test")
+
+
+pipestep_cd = CondaDependencies.create(
+    pip_packages=[
+        "pandas",
+        "numpy",
+        "azureml-sdk[automl,interpret]",
+        "azureml-defaults",
+        "azureml-train-automl-runtime",
+        "pyyaml"
+    ],
+    conda_packages=["xlrd", "scikit-learn", "numpy", "pyyaml"]
+)
+pipestep_run_config = RunConfiguration(conda_dependencies=pipestep_cd)
+pipestep_run_config.environment.docker.enabled = True
