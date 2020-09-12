@@ -65,20 +65,8 @@ def save_params(steps):
 
 
 # %%
-# Adding conda dependancies.
-
-cd = CondaDependencies.create(
-    pip_packages=[
-        "pandas",
-        "numpy",
-        "azureml-sdk[automl,interpret]",
-        "azureml-defaults",
-        "azureml-train-automl-runtime",
-        "pyyaml"
-    ],
-    conda_packages=["xlrd", "scikit-learn", "numpy", "pip"]
-)
-amlcompute_run_config = RunConfiguration(conda_dependencies=cd)
+# Setting up runtime environments
+amlcompute_run_config = RunConfiguration()
 amlcompute_run_config.environment.docker.enabled = True
 amlcompute_run_config.environment = Environment.get(
     ws, name='AzureML-AutoML').clone("bills-test")
