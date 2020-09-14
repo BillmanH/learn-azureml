@@ -35,7 +35,7 @@ get_iris_step = PythonScriptStep(
     arguments=["--output_dir", iris_raw],
     compute_target=f.compute_target,
     outputs=[iris_raw],
-    runconfig=f.amlcompute_run_config,
+    runconfig=f.pipestep_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/get_iris"),
     allow_reuse=True,
 )
@@ -49,7 +49,7 @@ munge_iris_step = PythonScriptStep(
     compute_target=f.compute_target,
     inputs=[iris_raw],
     outputs=[output],
-    runconfig=f.amlcompute_run_config,
+    runconfig=f.pipestep_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/munge"),
     allow_reuse=True,
 )

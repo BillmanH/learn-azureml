@@ -1,6 +1,7 @@
 # %%
 # import libraries
 import pandas as pd
+import yaml
 import argparse
 from sklearn import datasets
 import os

@@ -35,3 +35,11 @@ The notebook process assumes that you can do all of your data munging locally an
 | datastore_name | the name of the mounted datastore. This is like a blob store where you will put files |
 | tenant_id | Your Azure Tenant. In your azure properties |
 | resource_group | the resource group that the AzureML service is in |
+
+
+## Run configurations
+This is somewhat unclear in the MSFT docs, and likely to change in the future, however there is a distinction between the runconfig that you need for an `AutoMLRun` and a `PipelineScriptStep` run. In this example it is taken care of in the `config.py`.
+
+* The `amlcompute_run_config` is required for running the AutoML job **OR** any of it's outputs (like the explain step after). This is because that step uses a specific run environment `name='AzureML-AutoML'` that is curated for AutoML. If you plan to use the model or it's outputs, then you need to use this config. If you don't then there will be load discrepancies when loading the pickled model or it's outputs. As far as I can tell, you can't add libraries to it. 
+
+* The `pipestep_run_config` is a conda environment that you create and set up however you want. You can add libraries that do extra steps. This means that to use AutoML you need one config to run AutoML and build your output datasets, and then annother to take those libraries and do your extra processes with it. Note that you can use either config on inputs that go _into_ automl. 
