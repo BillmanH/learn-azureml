@@ -86,7 +86,7 @@ automl_config = AutoMLConfig(task='classification',
                              debug_log='automl_errors.log',
                              path='iris_gold',
                              training_data=output.read_delimited_files(
-                                 'iris_gold.csv').drop_columns('Path'),
+                                 'gold_data.csv').drop_columns('Path'),
                              label_column_name="species",
                              compute_target=f.compute_target,
                              model_explainability=True,

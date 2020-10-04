@@ -73,16 +73,18 @@ model_data = PipelineData(
 
 # Supported types: [azureml.data.tabular_dataset.TabularDataset,
 # azureml.pipeline.core.pipeline_output_dataset.PipelineOutputTabularDataset]
-automl_config = AutoMLConfig(
-    task='regression',
-    primary_metric='r2_score',
-    training_data=output.read_delimited_files(
-        'gold_data.csv').drop_columns('Path'),
-    label_column_name="price",
-    compute_target=f.compute_target,
-    model_explainability=True,
-    n_cross_validations=5)
 
+automl_config = AutoMLConfig(task="regression",
+                             debug_log='automl_errors.log',
+                             primary_metric='r2_score',
+                             path='linear_gold',
+                             training_data=output.read_delimited_files(
+                                 'gold_data.csv').drop_columns('Path'),
+                             label_column_name="price",
+                             compute_target=f.compute_target,
+                             max_concurrent_iterations=1,
+                             iterations=10,
+                             model_explainability=True)
 
 train_step = AutoMLStep('automl', automl_config,
                         outputs=[metrics_data, model_data],
