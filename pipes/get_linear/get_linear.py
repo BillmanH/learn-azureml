@@ -14,11 +14,11 @@ parser.add_argument("--output_dir", dest="output_dir")
 args = parser.parse_args()
 
 # %%
-# do raw data extraction
-iris = datasets.load_iris()
-print(iris.target_names)
-df = pd.DataFrame(iris.data, columns=iris.feature_names)
-df["species"] = [iris.target_names[x] for x in iris.target]
+# do raw data extraction (this is the mid-section that will change in your code)
+boston = datasets.load_boston()
+
+df = pd.DataFrame(boston.data, columns=boston.feature_names)
+df["price"] = boston.target
 print(df.head())
 print("rows total: ", len(df))
 

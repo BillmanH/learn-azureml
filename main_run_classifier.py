@@ -22,7 +22,6 @@ import os
 # saving the datastore location for consistency
 datastore = f.ws.datastores[f.params["datastore_name"]]
 iris_raw = PipelineData("iris_raw", datastore=datastore)
-iris_gold = PipelineData("iris_gold", datastore=datastore)
 shap_tables = PipelineData("shap_tables", datastore=datastore)
 
 
@@ -42,9 +41,9 @@ get_iris_step = PythonScriptStep(
 
 output = OutputFileDatasetConfig(destination=(datastore, 'iris_gold'))
 
-munge_iris_step = PythonScriptStep(
-    name="munge_iris_step",
-    script_name="munge_iris.py",
+munge_step = PythonScriptStep(
+    name="munge_step",
+    script_name="munge_step.py",
     arguments=["--input_dir", iris_raw, "--output_dir", output],
     compute_target=f.compute_target,
     inputs=[iris_raw],
@@ -127,12 +126,12 @@ pipeline = Pipeline(workspace=f.ws, steps=[score_step])
 
 
 # %%
-# Runn your model and watch the output
+# Run your model and watch the output
 
 pipeline_run = f.exp.submit(
     pipeline, regenerate_outputs=False, continue_on_step_failure=False, tags=f.params
 )
-
+pipeline_run
 # print(pipeline_run.get_portal_url())
 # pipeline_run.wait_for_completion()
 
