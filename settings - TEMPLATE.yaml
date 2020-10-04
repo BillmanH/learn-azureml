@@ -8,3 +8,6 @@ datastore_name: datastore_name
 tenant_id: tenant_id
 subscription_id: subscription_id
 resource_group: resource_group
+
+# your project parameters
+target_col: target_col
