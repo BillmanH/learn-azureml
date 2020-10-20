@@ -12,7 +12,7 @@ from azureml.pipeline.core import Pipeline, PipelineData, TrainingOutput
 from azureml.pipeline.steps import (AutoMLStep, DataTransferStep,
                                     PythonScriptStep)
 from azureml.train.automl import AutoMLConfig
-
+from azureml.data.dataset_factory import DataType
 import os
 
 # %%
@@ -79,7 +79,7 @@ automl_config = AutoMLConfig(task="regression",
                              primary_metric='r2_score',
                              path='linear_gold',
                              training_data=output.read_delimited_files(
-                                 'gold_data.csv').drop_columns('Path'),
+                                 'gold_data.csv', set_column_types={'price': DataType.to_float()}).drop_columns('Path'),
                              label_column_name="price",
                              compute_target=f.compute_target,
                              max_concurrent_iterations=1,
