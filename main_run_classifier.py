@@ -12,6 +12,7 @@ from azureml.pipeline.core import Pipeline, PipelineData, TrainingOutput
 from azureml.pipeline.steps import (AutoMLStep, DataTransferStep,
                                     PythonScriptStep)
 from azureml.train.automl import AutoMLConfig
+from azureml.data.dataset_factory import DataType
 
 import os
 

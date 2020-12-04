@@ -5,7 +5,7 @@ by [William Jeffrey Harding](https://www.linkedin.com/in/hardingwilliam/)
 
 william.jeffrey.harding@gmail.com 
 
-last tested at Azure ML SDK Version:  1.13.0. Confirmed that this process works end-to-end. 
+last tested at Azure ML SDK Version:  1.18.0. Confirmed that this process works end-to-end. 
 
 ![pipline diagram](images/rundiagram.png)
 
