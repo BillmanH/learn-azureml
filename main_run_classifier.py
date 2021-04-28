@@ -22,37 +22,12 @@ import os
 
 # saving the datastore location for consistency
 datastore = f.ws.datastores[f.params["datastore_name"]]
-iris_raw = PipelineData("iris_raw", datastore=datastore)
+crime_raw = PipelineData("gold_crime", datastore=datastore)
 shap_tables = PipelineData("shap_tables", datastore=datastore)
-
+dataset = Dataset.get_by_name(f.ws, name='Gold Crime2')
 
 # %%
 # Setting up script steps
-
-get_iris_step = PythonScriptStep(
-    name="get_iris_step",
-    script_name="get_iris.py",
-    arguments=["--output_dir", iris_raw],
-    compute_target=f.compute_target,
-    outputs=[iris_raw],
-    runconfig=f.pipestep_run_config,
-    source_directory=os.path.join(os.getcwd(), "pipes/get_iris"),
-    allow_reuse=True,
-)
-
-output = OutputFileDatasetConfig(destination=(datastore, 'iris_gold'))
-
-munge_step = PythonScriptStep(
-    name="munge_step",
-    script_name="munge_step.py",
-    arguments=["--input_dir", iris_raw, "--output_dir", output],
-    compute_target=f.compute_target,
-    inputs=[iris_raw],
-    outputs=[output],
-    runconfig=f.pipestep_run_config,
-    source_directory=os.path.join(os.getcwd(), "pipes/munge"),
-    allow_reuse=True,
-)
 
 
 # %%
@@ -85,10 +60,8 @@ automl_settings = {
 
 automl_config = AutoMLConfig(task='classification',
                              debug_log='automl_errors.log',
-                             path='iris_gold',
-                             training_data=output.read_delimited_files(
-                                 'gold_data.csv', set_column_types={'Survived': DataType.to_bool()}).drop_columns('Path'),
-                             label_column_name="species",
+                             training_data=dataset,
+                             label_column_name="crime_category",
                              compute_target=f.compute_target,
                              model_explainability=True,
                              ** automl_settings)
@@ -107,9 +80,9 @@ score_step = PythonScriptStep(
     name="score_step",
     script_name="score_step.py",
     arguments=["--model_data", model_data, "--iris_gold",
-               output, "--shap_tables", shap_tables],
+               dataset, "--shap_tables", shap_tables],
     compute_target=f.compute_target,
-    inputs=[model_data,  output],
+    inputs=[model_data,  dataset.as_named_input()],
     outputs=[shap_tables],
     runconfig=f.amlcompute_run_config,
     source_directory=os.path.join(os.getcwd(), "pipes/score_step"),

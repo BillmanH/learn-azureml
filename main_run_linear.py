@@ -24,18 +24,20 @@ datastore = f.ws.datastores[f.params["datastore_name"]]
 linear_raw = PipelineData("linear_raw", datastore=datastore)
 shap_tables = PipelineData("shap_tables", datastore=datastore)
 
+# PipelineData <- Each Pipe has a different GUID
+# OutputFileDatasetConfig <- 
 
 # %%
 # Setting up script steps
 
 get_linear_step = PythonScriptStep(
     name="get_linear_step",
-    script_name="get_linear.py",
+    script_name="get_data.py",
     arguments=["--output_dir", linear_raw],
     compute_target=f.compute_target,
     outputs=[linear_raw],
     runconfig=f.pipestep_run_config,
-    source_directory=os.path.join(os.getcwd(), "pipes/get_linear"),
+    source_directory=os.path.join(os.getcwd(), "pipes/get_data"),
     allow_reuse=True,
 )
 
@@ -83,7 +85,7 @@ automl_config = AutoMLConfig(task="regression",
                              label_column_name="price",
                              compute_target=f.compute_target,
                              max_concurrent_iterations=1,
-                             iterations=10,
+                             iterations=1,
                              model_explainability=True)
 
 train_step = AutoMLStep('automl', automl_config,

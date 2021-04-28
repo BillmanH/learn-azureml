@@ -29,6 +29,6 @@ print(df.dtypes)
 os.makedirs(args.output_dir, exist_ok=True)
 
 print("rows total: ", len(df))
-outputpath = os.path.join(args.output_dir, "gold_data.csv")
+outputpath = os.path.join(args.output_dir, "linear_gold.csv")
 df.to_csv(outputpath, index=False)
 print("file saved to:", outputpath)

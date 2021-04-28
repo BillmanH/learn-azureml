@@ -30,7 +30,8 @@ ws = Workspace.get(name=params.get("workspace_name"),
                    resource_group=params.get('resource_group'),
                    auth=interactive_auth)
 print(f"Found workspace {ws.name} at location {ws.location}")
-ws.set_default_datastore("factset")
+
+# ws.set_default_datastore("curzone1")
 exp = Experiment(ws, params.get("expermient_name"))
 compute_target = ComputeTarget(workspace=ws, name=params.get("compute_name"))
 
@@ -71,6 +72,7 @@ amlcompute_run_config.environment.docker.enabled = True
 amlcompute_run_config.environment = Environment.get(
     ws, name='AzureML-AutoML').clone("bills-test")
 
+custom_conda = CondaDependencies(conda_dependencies_file_path="env.yaml")
 
 pipestep_cd = CondaDependencies.create(
     pip_packages=[
@@ -83,5 +85,5 @@ pipestep_cd = CondaDependencies.create(
     ],
     conda_packages=["xlrd", "scikit-learn", "numpy", "pyyaml"]
 )
-pipestep_run_config = RunConfiguration(conda_dependencies=pipestep_cd)
-pipestep_run_config.environment.docker.enabled = True
+pipestep_run_config = RunConfiguration(conda_dependencies=custom_conda)
+# pipestep_run_config.environment.docker.enabled = True
